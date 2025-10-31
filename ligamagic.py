@@ -96,13 +96,16 @@ class ExtraPrice(BaseModel):
 class Edition(BaseModel):
     name: str
     code: str
-    img: HttpUrl
+    img: Optional[HttpUrl]
     date: date
     price: List[ExtraPrice]
 
     @model_validator(mode='before')
     @classmethod
     def add_http_protocol_to_img(cls, data: Any) -> Dict[str, Any]:
+        if data["img"] == "":
+          data["img"] = None
+          return data
         data["img"] = "http:" + data["img"]
         return data
 

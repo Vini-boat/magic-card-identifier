@@ -8,7 +8,7 @@ print("Nome da carta: ",end="")
 busca = input()
 
 get_card_editions = r"var cards_editions = ([\s\S]+?);\s*var card"
-get_card_name = r"<title>([\s\S]+?)\s*\/"
+get_card_name = r"<title>(?!Busca)([\s\S]+?)\s*\/"
 
 url = "https://www.ligamagic.com.br/"
 params = {
@@ -19,7 +19,11 @@ resp = curl.get(url, params=params, impersonate="chrome")
 resp.raise_for_status()
 
 
-card_name = re.findall(get_card_name,resp.text)[0]
+m = re.findall(get_card_name,resp.text)
+
+print(m)
+
+card_name = m[0]
 card_name = html.unescape(card_name)
 
 matches = re.findall(get_card_editions,resp.text)
